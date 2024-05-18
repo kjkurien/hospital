@@ -7,8 +7,8 @@ import "./FileUploader.css"
 const FileUploader = (props : any) => {
 
     const { onSelectFile, onDeleteFile, disabled } = props;
-    const hiddenFileInput = useRef(null);
-    const [file, setFile] = useState(null);
+    const hiddenFileInput = useRef<HTMLInputElement>(null);
+    const [file, setFile] = useState<File|null>();
 
     const handleClick = () => {
         if (hiddenFileInput.current) {
@@ -21,7 +21,6 @@ const FileUploader = (props : any) => {
     }
     const handleDeleteFile = () => {
         setFile(null);
-        hiddenFileInput.current.value = null;
         onDeleteFile();
     }
     return (

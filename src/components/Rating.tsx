@@ -3,7 +3,6 @@ import FileUploader from "./FileUploader"
 import Paper from '@mui/material/Paper';
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import DATA from './bed-list';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -17,10 +16,11 @@ const Item = styled(Paper)(({ theme }) => ({
 const Rating = () => {
     const [data, setData] = useState([]);
     useEffect(() => {
-        console.log('Fetching Bed list');
-        setData(DATA);
-      }, []);
-
+        fetch('/bed-list.json')
+          .then(response => response.json())
+          .then(json => setData(json.departments))
+          .catch(error => console.error('Error fetching JSON:', error));
+     }, []);
     return (
         <Box
             sx={{
@@ -46,10 +46,10 @@ const Rating = () => {
             </Grid>
         </Paper>
      
-        {DATA.map(function(dep) {
+        {data.map(function(dep : any) {
             return (
                 <>
-                {dep.wards.map(function(ward){
+                {dep.wards.map(function(ward : any){
                     return (
                         <Paper sx={{ minWidth: '100%', padding: '10px' }} elevation={3}>
                             <Grid container>
@@ -60,9 +60,9 @@ const Rating = () => {
                                 </Grid>
                                 <Grid xs={12}>
                                     {
-                                        ward.beds.map(function(b){
+                                        ward.beds.map(function(bed : any){
                                             return (
-                                                <Button>{b.bed}
+                                                <Button>{bed.bed}
 
                                                 </Button>
                                             )
