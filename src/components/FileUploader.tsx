@@ -29,18 +29,19 @@ const FileUploader = (props : any) => {
         event.preventDefault()
         const url = 'https://8r8zgngv90.execute-api.ap-south-1.amazonaws.com/test/test-hospital/occupancylist.xlsx';
         const formData = new FormData();
-        formData.append('file', file);
-        formData.append('fileName', file.name);
-        const config = {
-          headers: {
-            'Content-Type': 'application/vnd.ms-excel',
-            'Accept': "*/*"
-          },
-        };
-        axios.put(url, formData, config).then((response) => {
-          console.log(response.data);
-        });
-    
+        if (file) {
+            formData.append('file', file);
+            formData.append('fileName', file?.name);
+            const config = {
+            headers: {
+                'Content-Type': 'application/vnd.ms-excel',
+                'Accept': "*/*"
+            },
+            };
+            axios.put(url, formData, config).then((response) => {
+            console.log(response.data);
+            });
+        }
       }
     return (
         <div className="file-uploader">
