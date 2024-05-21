@@ -1,5 +1,8 @@
 import { Button, IconButton } from "@mui/material"
 import { useState, useRef } from "react"
+import {
+    fetchAuthSession
+  } from "aws-amplify/auth";
 import AttachmentIcon from "@mui/icons-material/Attachment"
 import DeleteIcon from "@mui/icons-material/Delete"
 import "./FileUploader.css"
@@ -25,18 +28,21 @@ const FileUploader = (props : any) => {
         setFile(null);
         onDeleteFile();
     }
-    const handleSubmit = (event: any) => {
+    const handleSubmit = async(event: any) => {
         event.preventDefault()
+        const session = await fetchAuthSession();
+        
+        const idToken = session.tokens?.idToken;
         const url = 'https://8r8zgngv90.execute-api.ap-south-1.amazonaws.com/test/test-hospital/occupancylist.xlsx';
         const formData = new FormData();
         if (file) {
             formData.append('file', file);
-            formData.append('fileName', file?.name);
             const config = {
-            headers: {
-                'Content-Type': 'application/vnd.ms-excel',
-                'Accept': "*/*"
-            },
+                headers: {
+                    'Content-Type': 'application/vnd.ms-excel',
+                    'Accept': "*/*",
+                    'Authorization': 'Bearer ' + idToken
+                },
             };
             axios.put(url, formData, config).then((response) => {
             console.log(response.data);
